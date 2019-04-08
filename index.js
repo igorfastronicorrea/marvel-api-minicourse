@@ -12,6 +12,8 @@ app.get('/', (req, res) => {
 
 require('./api/controller/heroes')(app);
 
-app.listen(3000, () => {
-    console.log('server started on port 3000');
+var porta = process.env.PORT || 3000;
+
+app.listen(porta, () => {
+    console.log('server started on port $(porta)');
 });
