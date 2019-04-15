@@ -11,25 +11,43 @@ const marvel = api.createClient({
 const formatHeroes = (marvelResults) => {
     return marvelResults.data.map((hero) => {
         return Object.assign({}, {
+            id: hero.id,
             name: hero.name,
             thumbnail: hero.thumbnail.path + "/portrait_xlarge.jpg",
         })
     });
 };
 
+const formatDetailHeroes = (marvelResults) =>{
+    return marvelResults.data.map((hero) => {
+        return Object.assign({}, {
+            id: hero.id,
+            name: hero.name,
+            thumbnail: hero.thumbnail.path + "/portrait_xlarge.jpg",
+            description: hero.description,
+        })
+    });
+};
+
 router.get('/all', async (req, res) =>{
     
-    let spider = formatHeroes(await marvel.characters.findByName('Spider-man'));
-    let iron = formatHeroes(await marvel.characters.findByName('iron man'));
-    let hulk = formatHeroes(await marvel.characters.findByName('hulk'));
-    let capitaoAmerica = formatHeroes(await marvel.characters.findByName('Captain America'));
-    let viuvaNegra = formatHeroes(await marvel.characters.findByName('Black Widow'));
-    let thor = formatHeroes(await marvel.characters.findByName('thor'));
+    let spider_man = formatHeroes(await marvel.characters.findByName('Spider-man'))[0];
+    let iron_man = formatHeroes(await marvel.characters.findByName('iron man'))[0];
+    let hulk = formatHeroes(await marvel.characters.findByName('hulk'))[0];
+    let captain_america = formatHeroes(await marvel.characters.findByName('Captain America'))[0];
+    let black_widow = formatHeroes(await marvel.characters.findByName('Black Widow'))[0];
+    let thor = formatHeroes(await marvel.characters.findByName('thor'))[0];
 
-    
-    const heroesAll = Object.assign({}, {heroes: {spider, iron, hulk, capitaoAmerica, viuvaNegra, thor}}) 
+    const heroesAll = Object.assign({}, {heroes: [spider_man, iron_man, hulk, captain_america, black_widow, thor]}) 
     return res.json(heroesAll);
 });
+
+router.get('/detail/:id', async (req, res) =>{
+    
+    let heroDetail = Object.assign({}, {avenger: formatDetailHeroes(await marvel.characters.find(req.params.id))[0]    }) 
+    return res.json(heroDetail);
+});
+
 
 router.get('/meta', async (req, res) =>{
     const metas = await marvel.metas.findAll();
