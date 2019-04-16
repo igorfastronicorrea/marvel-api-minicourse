@@ -29,7 +29,7 @@ const formatDetailHeroes = (marvelResults) =>{
     });
 };
 
-router.get('/all', async (req, res) =>{
+router.get('/', async (req, res) =>{
     
     let spider_man = formatHeroes(await marvel.characters.findByName('Spider-man'))[0];
     let iron_man = formatHeroes(await marvel.characters.findByName('iron man'))[0];
@@ -42,7 +42,7 @@ router.get('/all', async (req, res) =>{
     return res.json(heroesAll);
 });
 
-router.get('/detail/:id', async (req, res) =>{
+router.get('/:id', async (req, res) =>{
     
     let heroDetail = Object.assign({}, {avenger: formatDetailHeroes(await marvel.characters.find(req.params.id))[0]    }) 
     return res.json(heroDetail);
